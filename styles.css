@@ -18,6 +18,48 @@ Fonts:
 
 */
 
+.clouds{
+    position:absolute;
+    top:10px;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    font-size:50px;
+}
+
+.screen{
+    width:800px;
+    height:600px;
+    background:#8BD1CB;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+}
+
+.hidden{
+    display:none;
+}
+
+#start-btn,
+#restart-btn{
+    background:#FFC907;
+    border:none;
+    padding:14px 28px;
+    font-size:20px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.good{
+    color:#2E9DF7;
+}
+
+.bad{
+    color:#F5402C;
+}
 * {
     margin: 0;
     padding: 0;
@@ -69,9 +111,6 @@ body {
 
 
 #start-btn {
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -142,4 +181,12 @@ body {
     #game-container {
         height: 70vh;
     }
+}
+
+
+
+.bottom-bar{
+    position:absolute;
+    bottom:0;
+    width:100%;
 }

@@ -5,14 +5,14 @@ let dropMaker; // Will store our timer that creates drops regularly
 // Wait for button click to start the game
 document.getElementById("start-btn").addEventListener("click", startGame);
 
-function startGame() {
-  // Prevent multiple games from running at once
-  if (gameRunning) return;
+function startGame(){
 
-  gameRunning = true;
+document.getElementById("start-screen").classList.add("hidden");
+document.getElementById("game-screen").classList.remove("hidden");
 
-  // Create new drops every second (1000 milliseconds)
-  dropMaker = setInterval(createDrop, 1000);
+gameRunning = true;
+dropMaker = setInterval(createDrop,1000);
+
 }
 
 function createDrop() {

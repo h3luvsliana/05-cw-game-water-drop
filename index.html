@@ -7,18 +7,43 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="game-wrapper">
-        <h1 class="game-title">Water Drop</h1>
-        <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
-        <div class="score-panel">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="timer">Time: <span id="time">30</span>s</div>
-            <button id="start-btn">Start Game</button>
-        </div>
-        
+<div class="game-wrapper">
+
+    <div id="start-screen" class="screen">
+        <h1>Water Drop</h1>
+        <p>Collect as many droplets as possible</p>
+        <p class="good">💧 +3</p>
+        <p>Avoid bad drops!</p>
+        <p class="bad">💧 -2</p>
+        <button id="start-btn">Start</button>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
         <div id="game-container">
+
+            <div class="clouds">
+                <span>☁️</span>
+                <span>☁️</span>
+                <span>☁️</span>
+                <span>☁️</span>
+            </div>
+
+            <div class="bottom-bar">
+                <span id="time">60s left</span>
+                <span id="score">Score: 0</span>
+            </div>
+
         </div>
     </div>
+
+    <div id="end-screen" class="screen hidden">
+        <h1>Water Drop</h1>
+        <p>New High Score!</p>
+        <h2 id="final-score">0</h2>
+        <button id="restart-btn">Play Again</button>
+    </div>
+
+</div>
     
     <script src="script.js"></script>
 </body>
