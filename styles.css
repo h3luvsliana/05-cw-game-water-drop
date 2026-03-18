@@ -20,44 +20,44 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: min(100vw - 24px, 800px);
 }
 
 /* Screens */
 .screen {
-    width: 90vw;       /* responsive width */
+    width: 100%;
     max-width: 800px;
-    height: 80vh;      /* responsive height */
-    max-height: 600px;
+    height: 600px;
     background: #77ABBB; /* Start & End screens background */
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1.5vh;
-    padding: 1vh;
-    text-align: center;
+    gap: 15px;
 }
 
-.game-screen {
-    background: #8FD8F7; /* lighter blue for game */
+#game-screen {
+    background: #8FD8F7; /* Lighter blue for the actual game screen */
 }
 
 .hidden {
     display: none;
 }
 
+#game-screen:not(.hidden) {
+    display: flex;
+}
+
 /* Title + text */
 h1 {
-    font-size: 6vw;
-    max-font-size: 48px;
     color: #003366;
+    font-size: 48px;
 }
 
 p {
-    font-size: 3vw;
-    max-font-size: 18px;
     color: white;
+    font-size: 18px;
 }
 
 .good {
@@ -73,9 +73,8 @@ p {
 #restart-btn {
     background: #FFC907;
     border: none;
-    padding: 1.5vh 3vw; /* responsive padding */
-    font-size: 3vw;     /* responsive font */
-    max-font-size: 20px;
+    padding: 14px 28px;
+    font-size: 20px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
@@ -96,9 +95,9 @@ p {
 
 /* Game area */
 #game-container {
-    width: 95%;
-    height: 70%;
-    background: #77ABBB; /* start & end screens */
+    width: 100%;
+    height: 100%;
+    background: #77ABBB; /* consistent for start & end screens */
     border-radius: 8px;
     position: relative;
     overflow: hidden;
@@ -107,16 +106,16 @@ p {
 /* Clouds */
 .clouds {
     position: absolute;
-    top: 1vh;
+    top: 10px;
     width: 100%;
     display: flex;
     justify-content: space-around;
-    font-size: 8vw; /* responsive cloud size */
+    font-size: 50px;
 }
 
 .clouds span {
     opacity: 0.9;
-    color: white; /* clouds white */
+    color: white; /* clouds now white */
 }
 
 /* Bottom bar */
@@ -128,18 +127,15 @@ p {
     color: white;
     display: flex;
     justify-content: space-between;
-    padding: 1vh 2vw;
+    padding: 10px 20px;
     font-weight: bold;
-    font-size: 3vw;
 }
 
 /* Drops */
 .water-drop {
     position: absolute;
-    width: 6vw;  /* responsive width */
-    max-width: 60px; 
-    height: 6vw; /* responsive height */
-    max-height: 60px;
+    width: 50px;
+    height: 50px;
     background: radial-gradient(circle at 30% 30%, #8BD1CB, #2E9DF7);
     border-radius: 50%;
     animation: dropFall linear forwards;
@@ -151,7 +147,7 @@ p {
 }
 
 .bad-drop {
-    background: radial-gradient(circle at 30% 30%, #696767, #272626); /* black radial gradient */
+    background: radial-gradient(circle at 30% 30%, #696767, #272626); /* Black radial gradient like good drops */
 }
 
 /* Animation */
@@ -164,10 +160,109 @@ p {
     }
 }
 
-/* Responsive tweaks */
-@media (max-width: 850px) {
-    h1 { font-size: 8vw; }
-    p { font-size: 4vw; }
-    #start-btn, #restart-btn { font-size: 4vw; padding: 2vh 4vw; }
-    .bottom-bar { font-size: 4vw; }
+/* Responsive */
+@media (max-width: 799px) {
+    body {
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+    .game-wrapper {
+        width: 100%;
+    }
+
+    .screen {
+        width: 100%;
+        max-width: 760px;
+        height: min(78vh, 560px);
+        gap: 12px;
+        padding: 20px 14px;
+        text-align: center;
+    }
+
+    #game-screen {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    #start-btn,
+    #restart-btn {
+        font-size: 18px;
+        padding: 12px 22px;
+    }
+
+    .clouds {
+        top: 8px;
+        font-size: 38px;
+    }
+
+    .bottom-bar {
+        font-size: 16px;
+        padding: 10px 14px;
+    }
+
+    .cw-logo {
+        width: min(70%, 260px);
+        height: auto;
+    }
+}
+
+@media (max-width: 380px) {
+    body {
+        padding: 8px;
+    }
+
+    .screen {
+        height: min(76vh, 500px);
+        padding: 16px 10px;
+        gap: 10px;
+        border-radius: 8px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    #final-score {
+        font-size: 34px;
+    }
+
+    #start-btn,
+    #restart-btn {
+        width: min(220px, 80%);
+        font-size: 16px;
+        padding: 10px 18px;
+    }
+
+    .clouds {
+        top: 6px;
+        font-size: 28px;
+    }
+
+    .bottom-bar {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    #time,
+    #score {
+        white-space: nowrap;
+    }
+
+    .cw-logo {
+        width: min(82%, 210px);
+        margin-top: 8px;
+    }
 }

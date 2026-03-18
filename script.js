@@ -17,12 +17,17 @@ let score = 0;
 document.getElementById("start-btn").addEventListener("click", startGame);
 document.getElementById("restart-btn").addEventListener("click", startGame);
 
+function showOnlyScreen(screenToShow) {
+  [startScreen, gameScreen, endScreen].forEach(screen => {
+    screen.classList.add("hidden");
+  });
+  screenToShow.classList.remove("hidden");
+}
+
 // Start game function
 function startGame() {
   // Switch screens
-  startScreen.classList.add("hidden");
-  endScreen.classList.add("hidden");
-  gameScreen.classList.remove("hidden");
+  showOnlyScreen(gameScreen);
 
   // Reset state
   if (dropMaker) clearInterval(dropMaker);
@@ -58,6 +63,8 @@ function endGame() {
   clearInterval(countdownInterval);
   finalScoreElement.textContent = score;
   document.querySelectorAll(".water-drop").forEach(drop => drop.remove());
+  const gameContainer = document.getElementById("game-container");
+  const gameWidth = gameContainer.offsetWidth;
 
   if (score > 20) {
     for (let i = 0; i < 50; i++) {
@@ -66,17 +73,16 @@ function endGame() {
       confetti.style.width = "10px";
       confetti.style.height = "10px";
       confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
-      confetti.style.left = Math.random() * 800 + "px";
+      confetti.style.left = Math.random() * Math.max(gameWidth - 10, 0) + "px";
       confetti.style.top = "0px";
       confetti.style.opacity = "0.8";
       confetti.style.animation = "dropFall 2s linear forwards";
-      document.getElementById("game-container").appendChild(confetti);
+      gameContainer.appendChild(confetti);
       setTimeout(() => confetti.remove(), 2000);
     }
   }
 
-  gameScreen.classList.add("hidden");
-  endScreen.classList.remove("hidden");
+  showOnlyScreen(endScreen);
 }
 
 // Create drops
@@ -93,7 +99,7 @@ function createDrop() {
   drop.style.width = drop.style.height = `${size}px`;
 
   const gameWidth = document.getElementById("game-container").offsetWidth;
-  drop.style.left = Math.random() * (gameWidth - 60) + "px";
+  drop.style.left = Math.random() * Math.max(gameWidth - size, 0) + "px";
   drop.style.animationDuration = "4s";
 
   document.getElementById("game-container").appendChild(drop);
