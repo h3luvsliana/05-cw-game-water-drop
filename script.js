@@ -1,42 +1,45 @@
-// Variables to control game state
-let gameRunning = false; // Keeps track of whether game is active or not
-let dropMaker; // Will store our timer that creates drops regularly
-let countdownInterval;
-let timerValue = 130;
-let score = 0;
-
-// Wait for button click to start the game
-document.getElementById("start-btn").addEventListener("click", startGame);
-document.getElementById("restart-btn").addEventListener("click", startGame);
+// Elements
+const startScreen = document.getElementById("start-screen");
+const gameScreen = document.getElementById("game-screen");
+const endScreen = document.getElementById("end-screen");
 const countdownElement = document.getElementById("time");
 const scoreElement = document.getElementById("score");
 const finalScoreElement = document.getElementById("final-score");
 
+// Game state
+let gameRunning = false;
+let dropMaker;
+let countdownInterval;
+let timerValue = 30;
+let score = 0;
 
-function startGame(){
+// Start / Restart buttons
+document.getElementById("start-btn").addEventListener("click", startGame);
+document.getElementById("restart-btn").addEventListener("click", startGame);
 
-if (dropMaker) {
-  clearInterval(dropMaker);
+// Start game function
+function startGame() {
+  // Switch screens
+  startScreen.classList.add("hidden");
+  endScreen.classList.add("hidden");
+  gameScreen.classList.remove("hidden");
+
+  // Reset state
+  if (dropMaker) clearInterval(dropMaker);
+  if (countdownInterval) clearInterval(countdownInterval);
+  document.querySelectorAll(".water-drop").forEach(drop => drop.remove());
+
+  timerValue = 30;
+  score = 0;
+  countdownElement.textContent = `${timerValue}s left`;
+  scoreElement.textContent = `Score: ${score}`;
+
+  gameRunning = true;
+  dropMaker = setInterval(createDrop, 600);
+  startCountdown();
 }
-if (countdownInterval) {
-  clearInterval(countdownInterval);
-}
 
-timerValue = 130;
-score = 0;
-countdownElement.textContent = `${timerValue}s left`;
-scoreElement.textContent = `Score: ${score}`;
-
-document.getElementById("start-screen").classList.add("hidden");
-document.getElementById("end-screen").classList.add("hidden");
-document.getElementById("game-screen").classList.remove("hidden");
-
-gameRunning = true;
-dropMaker = setInterval(createDrop,1000);
-startCountdown();
-
-}
-
+// Countdown
 function startCountdown() {
   countdownInterval = setInterval(() => {
     timerValue--;
@@ -48,54 +51,80 @@ function startCountdown() {
   }, 1000);
 }
 
+// End game
 function endGame() {
   gameRunning = false;
   clearInterval(dropMaker);
   clearInterval(countdownInterval);
   finalScoreElement.textContent = score;
+  document.querySelectorAll(".water-drop").forEach(drop => drop.remove());
 
-  document.querySelectorAll(".water-drop").forEach((drop) => drop.remove());
+  if (score > 20) {
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement("div");
+      confetti.style.position = "absolute";
+      confetti.style.width = "10px";
+      confetti.style.height = "10px";
+      confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
+      confetti.style.left = Math.random() * 800 + "px";
+      confetti.style.top = "0px";
+      confetti.style.opacity = "0.8";
+      confetti.style.animation = "dropFall 2s linear forwards";
+      document.getElementById("game-container").appendChild(confetti);
+      setTimeout(() => confetti.remove(), 2000);
+    }
+  }
 
-  document.getElementById("game-screen").classList.add("hidden");
-  document.getElementById("end-screen").classList.remove("hidden");
+  gameScreen.classList.add("hidden");
+  endScreen.classList.remove("hidden");
 }
 
-
-
+// Create drops
 function createDrop() {
-  // Create a new div element that will be our water drop
   const drop = document.createElement("div");
   drop.className = "water-drop";
 
-  // Make drops different sizes for visual variety
+  const isBad = Math.random() < 0.25;
+  if (isBad) drop.classList.add("bad-drop");
+
   const initialSize = 60;
   const sizeMultiplier = Math.random() * 0.8 + 0.5;
   const size = initialSize * sizeMultiplier;
   drop.style.width = drop.style.height = `${size}px`;
 
-  // Position the drop randomly across the game width
-  // Subtract 60 pixels to keep drops fully inside the container
   const gameWidth = document.getElementById("game-container").offsetWidth;
-  const xPosition = Math.random() * (gameWidth - 60);
-  drop.style.left = xPosition + "px";
-
-  // Make drops fall for 4 seconds
+  drop.style.left = Math.random() * (gameWidth - 60) + "px";
   drop.style.animationDuration = "4s";
 
-  // Add the new drop to the game screen
   document.getElementById("game-container").appendChild(drop);
 
   drop.addEventListener("click", () => {
-    if (!gameRunning) {
-      return;
+    if (!gameRunning) return;
+    if (isBad) {
+      score -= 2;
+      showFeedback("-2", drop, "red");
+    } else {
+      score += 3;
+      showFeedback("+3", drop, "blue");
     }
-    score += 1;
     scoreElement.textContent = `Score: ${score}`;
     drop.remove();
   });
 
-  // Remove drops that reach the bottom (weren't clicked)
-  drop.addEventListener("animationend", () => {
-    drop.remove(); // Clean up drops that weren't caught
-  });
+  drop.addEventListener("animationend", () => drop.remove());
+}
+
+// Show feedback
+function showFeedback(text, drop, color) {
+  const feedback = document.createElement("div");
+  feedback.textContent = text;
+  feedback.style.position = "absolute";
+  feedback.style.left = drop.style.left;
+  feedback.style.top = drop.style.top;
+  feedback.style.color = color;
+  feedback.style.fontWeight = "bold";
+  feedback.style.fontSize = "20px";
+
+  document.getElementById("game-container").appendChild(feedback);
+  setTimeout(() => feedback.remove(), 800);
 }
