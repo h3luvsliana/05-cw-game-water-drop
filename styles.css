@@ -24,19 +24,23 @@ body {
 
 /* Screens */
 .screen {
-    width: 800px;
-    height: 600px;
+    width: 90vw;       /* responsive width */
+    max-width: 800px;
+    height: 80vh;      /* responsive height */
+    max-height: 600px;
     background: #77ABBB; /* Start & End screens background */
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 1.5vh;
+    padding: 1vh;
+    text-align: center;
 }
 
 .game-screen {
-    background: #8FD8F7; /* Lighter blue for the actual game screen */
+    background: #8FD8F7; /* lighter blue for game */
 }
 
 .hidden {
@@ -45,13 +49,15 @@ body {
 
 /* Title + text */
 h1 {
+    font-size: 6vw;
+    max-font-size: 48px;
     color: #003366;
-    font-size: 48px;
 }
 
 p {
+    font-size: 3vw;
+    max-font-size: 18px;
     color: white;
-    font-size: 18px;
 }
 
 .good {
@@ -67,8 +73,9 @@ p {
 #restart-btn {
     background: #FFC907;
     border: none;
-    padding: 14px 28px;
-    font-size: 20px;
+    padding: 1.5vh 3vw; /* responsive padding */
+    font-size: 3vw;     /* responsive font */
+    max-font-size: 20px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
@@ -89,9 +96,9 @@ p {
 
 /* Game area */
 #game-container {
-    width: 800px;
-    height: 600px;
-    background: #77ABBB; /* consistent for start & end screens */
+    width: 95%;
+    height: 70%;
+    background: #77ABBB; /* start & end screens */
     border-radius: 8px;
     position: relative;
     overflow: hidden;
@@ -100,16 +107,16 @@ p {
 /* Clouds */
 .clouds {
     position: absolute;
-    top: 10px;
+    top: 1vh;
     width: 100%;
     display: flex;
     justify-content: space-around;
-    font-size: 50px;
+    font-size: 8vw; /* responsive cloud size */
 }
 
 .clouds span {
     opacity: 0.9;
-    color: white; /* clouds now white */
+    color: white; /* clouds white */
 }
 
 /* Bottom bar */
@@ -121,15 +128,18 @@ p {
     color: white;
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 1vh 2vw;
     font-weight: bold;
+    font-size: 3vw;
 }
 
 /* Drops */
 .water-drop {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 6vw;  /* responsive width */
+    max-width: 60px; 
+    height: 6vw; /* responsive height */
+    max-height: 60px;
     background: radial-gradient(circle at 30% 30%, #8BD1CB, #2E9DF7);
     border-radius: 50%;
     animation: dropFall linear forwards;
@@ -141,7 +151,7 @@ p {
 }
 
 .bad-drop {
-    background: radial-gradient(circle at 30% 30%, #696767, #272626); /* Black radial gradient like good drops */
+    background: radial-gradient(circle at 30% 30%, #696767, #272626); /* black radial gradient */
 }
 
 /* Animation */
@@ -154,10 +164,10 @@ p {
     }
 }
 
-/* Responsive */
+/* Responsive tweaks */
 @media (max-width: 850px) {
-    .screen, #game-container {
-        width: 95vw;
-        height: 70vh;
-    }
+    h1 { font-size: 8vw; }
+    p { font-size: 4vw; }
+    #start-btn, #restart-btn { font-size: 4vw; padding: 2vh 4vw; }
+    .bottom-bar { font-size: 4vw; }
 }
