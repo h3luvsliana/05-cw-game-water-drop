@@ -13,9 +13,21 @@ let countdownInterval;
 let timerValue = 30;
 let score = 0;
 
-// Start / Restart buttons
+// Difficulty settings
+let dropSpeed = 600;
+let badDropChance = 0.25;
+let defaultTime = 30;
+
+// Sound
+const popSound = new Audio("pop.mp3");
+
+// Milestones
+const milestones = [15, 27, 39, 51, 63, 75];
+
+// Buttons
 document.getElementById("start-btn").addEventListener("click", startGame);
 document.getElementById("restart-btn").addEventListener("click", startGame);
+document.getElementById("in-game-restart-btn").addEventListener("click", startGame);
 
 function showOnlyScreen(screenToShow) {
   [startScreen, gameScreen, endScreen].forEach(screen => {
@@ -24,23 +36,55 @@ function showOnlyScreen(screenToShow) {
   screenToShow.classList.remove("hidden");
 }
 
-// Start game function
+function setDifficulty(level) {
+  document.querySelectorAll(".difficulty-buttons button")
+    .forEach(btn => btn.classList.remove("selected-difficulty"));
+
+  if (level === "easy") {
+    dropSpeed = 900;
+    badDropChance = 0.15;
+    defaultTime = 35;
+    document.getElementById("easy-btn").classList.add("selected-difficulty");
+    document.getElementById("difficulty-selected").textContent = "Difficulty: Easy";
+  }
+
+  if (level === "normal") {
+    dropSpeed = 600;
+    badDropChance = 0.25;
+    defaultTime = 30;
+    document.getElementById("normal-btn").classList.add("selected-difficulty");
+    document.getElementById("difficulty-selected").textContent = "Difficulty: Normal";
+  }
+
+  if (level === "hard") {
+    dropSpeed = 350;
+    badDropChance = 0.4;
+    defaultTime = 25;
+    document.getElementById("hard-btn").classList.add("selected-difficulty");
+    document.getElementById("difficulty-selected").textContent = "Difficulty: Hard";
+  }
+}
+
+// Start game
 function startGame() {
-  // Switch screens
   showOnlyScreen(gameScreen);
 
-  // Reset state
   if (dropMaker) clearInterval(dropMaker);
   if (countdownInterval) clearInterval(countdownInterval);
   document.querySelectorAll(".water-drop").forEach(drop => drop.remove());
 
-  timerValue = 30;
+  timerValue = defaultTime;
   score = 0;
+
   countdownElement.textContent = `${timerValue}s left`;
   scoreElement.textContent = `Score: ${score}`;
 
+  // Reset milestone icons
+  const milestoneIcons = document.querySelectorAll("#milestones span");
+  milestoneIcons.forEach(icon => icon.classList.remove("show"));
+
   gameRunning = true;
-  dropMaker = setInterval(createDrop, 600);
+  dropMaker = setInterval(createDrop, dropSpeed);
   startCountdown();
 }
 
@@ -49,6 +93,7 @@ function startCountdown() {
   countdownInterval = setInterval(() => {
     timerValue--;
     countdownElement.textContent = `${timerValue}s left`;
+
     if (timerValue <= 0) {
       clearInterval(countdownInterval);
       endGame();
@@ -61,28 +106,30 @@ function endGame() {
   gameRunning = false;
   clearInterval(dropMaker);
   clearInterval(countdownInterval);
-  finalScoreElement.textContent = score;
-  document.querySelectorAll(".water-drop").forEach(drop => drop.remove());
-  const gameContainer = document.getElementById("game-container");
-  const gameWidth = gameContainer.offsetWidth;
 
-  if (score > 20) {
-    for (let i = 0; i < 50; i++) {
-      const confetti = document.createElement("div");
-      confetti.style.position = "absolute";
-      confetti.style.width = "10px";
-      confetti.style.height = "10px";
-      confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
-      confetti.style.left = Math.random() * Math.max(gameWidth - 10, 0) + "px";
-      confetti.style.top = "0px";
-      confetti.style.opacity = "0.8";
-      confetti.style.animation = "dropFall 2s linear forwards";
-      gameContainer.appendChild(confetti);
-      setTimeout(() => confetti.remove(), 2000);
-    }
+  finalScoreElement.textContent = score;
+
+  document.querySelectorAll(".water-drop").forEach(drop => drop.remove());
+
+  // End screen milestones
+  const endMilestones = document.getElementById("end-milestones");
+  endMilestones.innerHTML = "";
+  for (let i = 0; i < milestones.length; i++) {
+    const span = document.createElement("span");
+    span.textContent = "💧";
+    if (score >= milestones[i]) span.classList.add("hit");
+    endMilestones.appendChild(span);
   }
 
-  showOnlyScreen(endScreen);
+  const transitionDelay = score > 30 ? 1800 : 1000;
+
+  if (score > 30) {
+    launchConfetti();
+  }
+
+  setTimeout(() => {
+    showOnlyScreen(endScreen);
+  }, transitionDelay);
 }
 
 // Create drops
@@ -90,7 +137,7 @@ function createDrop() {
   const drop = document.createElement("div");
   drop.className = "water-drop";
 
-  const isBad = Math.random() < 0.25;
+  const isBad = Math.random() < badDropChance;
   if (isBad) drop.classList.add("bad-drop");
 
   const initialSize = 60;
@@ -104,23 +151,38 @@ function createDrop() {
 
   document.getElementById("game-container").appendChild(drop);
 
+  // Click
   drop.addEventListener("click", () => {
     if (!gameRunning) return;
+
+    popSound.currentTime = 0;
+    popSound.play();
+
     if (isBad) {
       score -= 2;
-      showFeedback("-2", drop, "red");
+      showFeedback("-2", drop, "black");
     } else {
       score += 3;
       showFeedback("+3", drop, "blue");
     }
+
     scoreElement.textContent = `Score: ${score}`;
+
+    // Milestones appear one by one
+    const milestoneIcons = document.querySelectorAll("#milestones span");
+    for (let i = 0; i < milestones.length; i++) {
+      if (score >= milestones[i]) {
+        milestoneIcons[i].classList.add("show");
+      }
+    }
+
     drop.remove();
   });
 
   drop.addEventListener("animationend", () => drop.remove());
 }
 
-// Show feedback
+// Feedback text
 function showFeedback(text, drop, color) {
   const feedback = document.createElement("div");
   feedback.textContent = text;
@@ -133,4 +195,45 @@ function showFeedback(text, drop, color) {
 
   document.getElementById("game-container").appendChild(feedback);
   setTimeout(() => feedback.remove(), 800);
+}
+
+function launchConfetti() {
+  const gameContainer = document.getElementById("game-container");
+  const colors = ["#FFC907", "#2E9DF7", "#8BD1CB", "#003366", "#BF6C46"];
+
+  for (let i = 0; i < 120; i++) {
+    const bit = document.createElement("div");
+    const size = Math.random() * 7 + 5;
+
+    bit.style.position = "absolute";
+    bit.style.width = `${size}px`;
+    bit.style.height = `${size * 0.6}px`;
+    bit.style.left = `${Math.random() * 100}%`;
+    bit.style.top = "-20px";
+    bit.style.background = colors[Math.floor(Math.random() * colors.length)];
+    bit.style.opacity = "0.95";
+    bit.style.borderRadius = "2px";
+    bit.style.zIndex = "9";
+    bit.style.pointerEvents = "none";
+
+    const fallTime = Math.random() * 700 + 900;
+    const sway = Math.random() * 100 - 50;
+    bit.animate(
+      [
+        { transform: "translate(0, 0) rotate(0deg)", opacity: 1 },
+        {
+          transform: `translate(${sway}px, 650px) rotate(${Math.random() * 720 - 360}deg)`,
+          opacity: 0.6
+        }
+      ],
+      {
+        duration: fallTime,
+        easing: "ease-in",
+        fill: "forwards"
+      }
+    );
+
+    gameContainer.appendChild(bit);
+    setTimeout(() => bit.remove(), fallTime + 80);
+  }
 }
