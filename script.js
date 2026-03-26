@@ -26,17 +26,25 @@ let badDropChance = 0.25;
 let defaultTime = 30;
 
 // =====================
-// SOUNDS (FIXED)
+// SOUNDS (FIXED FOR AUTOPLAY RESTRICTIONS)
 // =====================
 const goodSound = new Audio("goodDrop.mp3");
 const badSound = new Audio("badDrop.mp3");
 const milestoneSound = new Audio("mileStone.mp3");
 
-// unlock audio on first click (IMPORTANT FIX)
+// unlock audio on first click (required for most browsers)
 document.body.addEventListener("click", () => {
   goodSound.play().catch(() => {});
+  goodSound.pause();
+  goodSound.currentTime = 0;
+
   badSound.play().catch(() => {});
+  badSound.pause();
+  badSound.currentTime = 0;
+
   milestoneSound.play().catch(() => {});
+  milestoneSound.pause();
+  milestoneSound.currentTime = 0;
 }, { once: true });
 
 // =====================
@@ -148,7 +156,7 @@ function startCountdown() {
 }
 
 // =====================
-// END GAME (FIXED)
+// END GAME
 // =====================
 function endGame() {
   gameRunning = false;
@@ -159,10 +167,9 @@ function endGame() {
 
   document.querySelectorAll(".water-drop").forEach(d => d.remove());
 
-  // FIX: only show earned milestones
+  // Only show earned milestones
   const endMilestones = document.getElementById("end-milestones");
   endMilestones.innerHTML = "";
-
   milestones.forEach(m => {
     if (score >= m) {
       const span = document.createElement("span");
