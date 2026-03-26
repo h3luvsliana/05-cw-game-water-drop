@@ -24,7 +24,7 @@ font-family: "Proxima Nova", "Montserrat", Avenir, sans-serif;
 /* Screens */
 .screen {
     width: 100%;
-    max-width: 800px;
+    max-width: 880px;
     height: 600px;
     background: #77ABBB;
     border-radius: 10px;
@@ -60,7 +60,7 @@ font-family: "Proxima Nova", "Montserrat", Avenir, sans-serif;
 
 /* End screen text same color as title */
 .end-text {
-    color: #003366;
+    color: #ffffff;
     font-size: 20px;
 }
 
@@ -96,13 +96,13 @@ font-family: "Proxima Nova", "Montserrat", Avenir, sans-serif;
 /* Selected difficulty highlight */
 .selected-difficulty {
     background: #FFC907 !important;
-    color: black !important;
+    color: rgb(0, 0, 0) !important;
 }
 
 /* Logo at bottom inside screen */
 .bottom-logo {
-    position: absolute;
-    bottom: 15px;
+    position: static;
+    margin-top: 10px;
     height: 40px;
 }
 
@@ -181,12 +181,12 @@ font-family: "Proxima Nova", "Montserrat", Avenir, sans-serif;
 }
 
 .end-content {
-    min-height: 58%;
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
 }
 
 .hit {
@@ -198,7 +198,7 @@ footer {
   width: 100%;
   text-align: center;
   padding: 15px 0;
-  background: white; /* WHITE BACKGROUND */
+  background: #A7D8E3; /* WHITE BACKGROUND */
   margin-top: 20px;
 }
 
@@ -211,6 +211,19 @@ footer a {
 .cw-footer-logo {
   height: 30px;
 }
+
+.fact {
+  width: 85%; /* ⬅️ wider */
+  max-width: 600px;
+  color: #003366;
+  font-size: 16px;
+  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 12px;
+  border-radius: 6px;
+}
+
+
 
 /* Animation */
 @keyframes dropFall {
@@ -236,6 +249,18 @@ footer a {
         gap: 12px;
         padding: 20px 14px;
         text-align: center;
+            justify-content: flex-start;
+    padding: 40px 20px 30px; /* ⬅️ adds bottom breathing room */
+}
+
+/* Push button + logo nicely */
+#end-screen button {
+    margin-top: 10px;
+}
+
+#end-screen .bottom-logo {
+    margin-top: 20px;
+}
     }
 
     #game-screen {

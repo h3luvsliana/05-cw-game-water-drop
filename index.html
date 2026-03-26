@@ -64,20 +64,35 @@
     </div>
 
     <!-- END SCREEN -->
-    <div id="end-screen" class="screen hidden">
-        <h1 class="title">Water Drop</h1>
-        <div class="end-content">
-            <p class="end-text">Final Score: <span id="final-score">0</span></p>
-            <p class="end-text">Milestones Reached:</p>
-            <div id="end-milestones"></div>
-            <button id="restart-btn">Play Again</button>
+<!-- END SCREEN -->
+<div id="end-screen" class="screen hidden">
+    <h1 class="title">Water Drop</h1>
+
+    <div class="end-content">
+
+        <p class="end-text">Final Score: <span id="final-score">0</span></p>
+
+        <p class="end-text">Milestones Reached:</p>
+        <div id="end-milestones"></div>
+
+        <p>Select Difficulty:</p>
+        <div class="difficulty-buttons">
+            <button onclick="setDifficulty('easy')" id="easy-btn-end">Easy</button>
+            <button onclick="setDifficulty('normal')" id="normal-btn-end">Normal</button>
+            <button onclick="setDifficulty('hard')" id="hard-btn-end">Hard</button>
         </div>
 
-        <img src="img/cw_logo-horizontal.png" alt="charity: water logo" class="cw-logo bottom-logo">
+        <p id="difficulty-selected-end">Difficulty: Normal</p>
+
+        <p class="end-text">Did you know?</p>
+        <p id="fact-text" class="fact"></p>
+
+        <button id="restart-btn">Play Again</button>
+
     </div>
 
+    <img src="img/cw_logo-horizontal.png" class="cw-logo bottom-logo">
 </div>
-
 <footer>
   <img src="img/cw_logo-horizontal.png" alt="charity: water logo" class="cw-footer-logo">
   <p>
